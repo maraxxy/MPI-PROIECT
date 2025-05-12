@@ -1,0 +1,208 @@
+<html>
+<head>
+<title>algoritmi_sat.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #7a7e85;}
+.s3 { color: #bcbec4;}
+.s4 { color: #2aacb8;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+algoritmi_sat.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">random</span>
+
+<span class="s2"># ---------------- Funcții Ajutătoare ----------------</span>
+
+<span class="s0">def </span><span class="s1">este_clauza_unitara</span><span class="s3">(</span><span class="s1">clauza</span><span class="s3">):</span>
+    <span class="s0">return </span><span class="s1">len</span><span class="s3">(</span><span class="s1">clauza</span><span class="s3">) == </span><span class="s4">1</span>
+
+<span class="s0">def </span><span class="s1">gaseste_clauze_unitare</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">):</span>
+    <span class="s0">return </span><span class="s3">{</span><span class="s1">next</span><span class="s3">(</span><span class="s1">iter</span><span class="s3">(</span><span class="s1">c</span><span class="s3">)) </span><span class="s0">for </span><span class="s1">c </span><span class="s0">in </span><span class="s1">clauze </span><span class="s0">if </span><span class="s1">este_clauza_unitara</span><span class="s3">(</span><span class="s1">c</span><span class="s3">)}</span>
+
+<span class="s0">def </span><span class="s1">regula_clauzelor_unitare</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">=</span><span class="s0">False</span><span class="s3">):</span>
+    <span class="s1">clauze </span><span class="s3">= </span><span class="s1">set</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">)</span>
+    <span class="s0">while True</span><span class="s3">:</span>
+        <span class="s1">unitare </span><span class="s3">= </span><span class="s1">gaseste_clauze_unitare</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">)</span>
+        <span class="s0">if not </span><span class="s1">unitare</span><span class="s3">:</span>
+            <span class="s0">break</span>
+        <span class="s0">for </span><span class="s1">lit </span><span class="s0">in </span><span class="s1">unitare</span><span class="s3">:</span>
+            <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+                <span class="s1">print</span><span class="s3">(</span><span class="s5">f&quot;Aplic regula clauzei unitare cu literalul </span><span class="s0">{</span><span class="s1">lit</span><span class="s0">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+            <span class="s1">clauze </span><span class="s3">= {</span><span class="s1">c </span><span class="s0">for </span><span class="s1">c </span><span class="s0">in </span><span class="s1">clauze </span><span class="s0">if </span><span class="s1">lit </span><span class="s0">not in </span><span class="s1">c</span><span class="s3">}</span>
+            <span class="s1">clauze_nou </span><span class="s3">= </span><span class="s1">set</span><span class="s3">()</span>
+            <span class="s0">for </span><span class="s1">c </span><span class="s0">in </span><span class="s1">clauze</span><span class="s3">:</span>
+                <span class="s0">if </span><span class="s3">-</span><span class="s1">lit </span><span class="s0">in </span><span class="s1">c</span><span class="s3">:</span>
+                    <span class="s1">clauza_noua </span><span class="s3">= </span><span class="s1">frozenset</span><span class="s3">(</span><span class="s1">l </span><span class="s0">for </span><span class="s1">l </span><span class="s0">in </span><span class="s1">c </span><span class="s0">if </span><span class="s1">l </span><span class="s3">!= -</span><span class="s1">lit</span><span class="s3">)</span>
+                    <span class="s0">if not </span><span class="s1">clauza_noua</span><span class="s3">:</span>
+                        <span class="s0">return </span><span class="s3">{</span><span class="s1">frozenset</span><span class="s3">()}</span>
+                    <span class="s1">clauze_nou</span><span class="s3">.</span><span class="s1">add</span><span class="s3">(</span><span class="s1">clauza_noua</span><span class="s3">)</span>
+                <span class="s0">else</span><span class="s3">:</span>
+                    <span class="s1">clauze_nou</span><span class="s3">.</span><span class="s1">add</span><span class="s3">(</span><span class="s1">c</span><span class="s3">)</span>
+            <span class="s1">clauze </span><span class="s3">= </span><span class="s1">clauze_nou</span>
+    <span class="s0">return </span><span class="s1">clauze</span>
+
+<span class="s0">def </span><span class="s1">gaseste_literaluri_pure</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">):</span>
+    <span class="s1">toate </span><span class="s3">= </span><span class="s1">set</span><span class="s3">()</span>
+    <span class="s0">for </span><span class="s1">clauza </span><span class="s0">in </span><span class="s1">clauze</span><span class="s3">:</span>
+        <span class="s1">toate</span><span class="s3">.</span><span class="s1">update</span><span class="s3">(</span><span class="s1">clauza</span><span class="s3">)</span>
+    <span class="s0">return </span><span class="s3">{</span><span class="s1">l </span><span class="s0">for </span><span class="s1">l </span><span class="s0">in </span><span class="s1">toate </span><span class="s0">if </span><span class="s3">-</span><span class="s1">l </span><span class="s0">not in </span><span class="s1">toate</span><span class="s3">}</span>
+
+<span class="s0">def </span><span class="s1">regula_literalurilor_pure</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">=</span><span class="s0">False</span><span class="s3">):</span>
+    <span class="s1">clauze </span><span class="s3">= </span><span class="s1">set</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">)</span>
+    <span class="s0">while True</span><span class="s3">:</span>
+        <span class="s1">pure </span><span class="s3">= </span><span class="s1">gaseste_literaluri_pure</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">)</span>
+        <span class="s0">if not </span><span class="s1">pure</span><span class="s3">:</span>
+            <span class="s0">break</span>
+        <span class="s0">for </span><span class="s1">lit </span><span class="s0">in </span><span class="s1">pure</span><span class="s3">:</span>
+            <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+                <span class="s1">print</span><span class="s3">(</span><span class="s5">f&quot;Aplic regula literalului pur pentru </span><span class="s0">{</span><span class="s1">lit</span><span class="s0">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+            <span class="s1">clauze </span><span class="s3">= {</span><span class="s1">c </span><span class="s0">for </span><span class="s1">c </span><span class="s0">in </span><span class="s1">clauze </span><span class="s0">if </span><span class="s1">lit </span><span class="s0">not in </span><span class="s1">c</span><span class="s3">}</span>
+    <span class="s0">return </span><span class="s1">clauze</span>
+
+<span class="s0">def </span><span class="s1">rezolva</span><span class="s3">(</span><span class="s1">c1</span><span class="s3">, </span><span class="s1">c2</span><span class="s3">):</span>
+    <span class="s1">rezultat </span><span class="s3">= []</span>
+    <span class="s0">for </span><span class="s1">l </span><span class="s0">in </span><span class="s1">c1</span><span class="s3">:</span>
+        <span class="s0">if </span><span class="s3">-</span><span class="s1">l </span><span class="s0">in </span><span class="s1">c2</span><span class="s3">:</span>
+            <span class="s1">noua </span><span class="s3">= (</span><span class="s1">c1 </span><span class="s3">- {</span><span class="s1">l</span><span class="s3">}) | (</span><span class="s1">c2 </span><span class="s3">- {-</span><span class="s1">l</span><span class="s3">})</span>
+            <span class="s0">if not </span><span class="s1">tautologie</span><span class="s3">(</span><span class="s1">noua</span><span class="s3">):</span>
+                <span class="s1">rezultat</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">noua</span><span class="s3">)</span>
+    <span class="s0">return </span><span class="s1">rezultat</span>
+
+<span class="s0">def </span><span class="s1">tautologie</span><span class="s3">(</span><span class="s1">clauza</span><span class="s3">):</span>
+    <span class="s0">return </span><span class="s1">any</span><span class="s3">(-</span><span class="s1">l </span><span class="s0">in </span><span class="s1">clauza </span><span class="s0">for </span><span class="s1">l </span><span class="s0">in </span><span class="s1">clauza</span><span class="s3">)</span>
+
+<span class="s0">def </span><span class="s1">alegere_literal</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">metoda</span><span class="s3">=</span><span class="s5">&quot;primul&quot;</span><span class="s3">):</span>
+    <span class="s0">if </span><span class="s1">metoda </span><span class="s3">== </span><span class="s5">&quot;primul&quot;</span><span class="s3">:</span>
+        <span class="s0">for </span><span class="s1">clauza </span><span class="s0">in </span><span class="s1">clauze</span><span class="s3">:</span>
+            <span class="s0">for </span><span class="s1">l </span><span class="s0">in </span><span class="s1">clauza</span><span class="s3">:</span>
+                <span class="s0">return </span><span class="s1">l</span>
+    <span class="s0">else</span><span class="s3">:</span>
+        <span class="s1">toate </span><span class="s3">= {</span><span class="s1">l </span><span class="s0">for </span><span class="s1">c </span><span class="s0">in </span><span class="s1">clauze </span><span class="s0">for </span><span class="s1">l </span><span class="s0">in </span><span class="s1">c</span><span class="s3">}</span>
+        <span class="s0">return </span><span class="s1">random</span><span class="s3">.</span><span class="s1">choice</span><span class="s3">(</span><span class="s1">list</span><span class="s3">(</span><span class="s1">toate</span><span class="s3">))</span>
+
+<span class="s2"># ---------------- Algoritmi SAT ----------------</span>
+
+<span class="s0">def </span><span class="s1">rezolutie</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">=</span><span class="s0">False</span><span class="s3">):</span>
+    <span class="s1">clauze </span><span class="s3">= [</span><span class="s1">frozenset</span><span class="s3">(</span><span class="s1">c</span><span class="s3">) </span><span class="s0">for </span><span class="s1">c </span><span class="s0">in </span><span class="s1">clauze</span><span class="s3">]</span>
+    <span class="s1">contor </span><span class="s3">= </span><span class="s4">1</span>
+
+    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+        <span class="s0">for </span><span class="s1">c </span><span class="s0">in </span><span class="s1">clauze</span><span class="s3">:</span>
+            <span class="s1">print</span><span class="s3">(</span><span class="s5">f&quot;</span><span class="s0">{</span><span class="s1">contor</span><span class="s0">}</span><span class="s5">: </span><span class="s0">{</span><span class="s1">set</span><span class="s3">(</span><span class="s1">c</span><span class="s3">)</span><span class="s0">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+            <span class="s1">contor </span><span class="s3">+= </span><span class="s4">1</span>
+
+    <span class="s0">while True</span><span class="s3">:</span>
+        <span class="s1">noi </span><span class="s3">= </span><span class="s1">set</span><span class="s3">()</span>
+        <span class="s1">existente </span><span class="s3">= </span><span class="s1">set</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">)</span>
+
+        <span class="s0">if not </span><span class="s1">clauze</span><span class="s3">:</span>
+            <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;SATISFIABIL&quot;</span><span class="s3">)</span>
+            <span class="s0">return True</span>
+
+        <span class="s1">perechi </span><span class="s3">= [(</span><span class="s1">clauze</span><span class="s3">[</span><span class="s1">i</span><span class="s3">], </span><span class="s1">clauze</span><span class="s3">[</span><span class="s1">j</span><span class="s3">]) </span><span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range</span><span class="s3">(</span><span class="s1">len</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">)) </span><span class="s0">for </span><span class="s1">j </span><span class="s0">in </span><span class="s1">range</span><span class="s3">(</span><span class="s1">i </span><span class="s3">+ </span><span class="s4">1</span><span class="s3">, </span><span class="s1">len</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">))]</span>
+
+        <span class="s0">for </span><span class="s1">c1</span><span class="s3">, </span><span class="s1">c2 </span><span class="s0">in </span><span class="s1">perechi</span><span class="s3">:</span>
+            <span class="s1">rezolvente </span><span class="s3">= </span><span class="s1">rezolva</span><span class="s3">(</span><span class="s1">c1</span><span class="s3">, </span><span class="s1">c2</span><span class="s3">)</span>
+            <span class="s0">for </span><span class="s1">r </span><span class="s0">in </span><span class="s1">rezolvente</span><span class="s3">:</span>
+                <span class="s1">r </span><span class="s3">= </span><span class="s1">frozenset</span><span class="s3">(</span><span class="s1">r</span><span class="s3">)</span>
+                <span class="s0">if not </span><span class="s1">r</span><span class="s3">:</span>
+                    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+                        <span class="s1">print</span><span class="s3">(</span><span class="s5">f&quot;(</span><span class="s0">{</span><span class="s1">contor</span><span class="s0">}</span><span class="s5">) </span><span class="s0">{{}} </span><span class="s5">din </span><span class="s0">{</span><span class="s1">set</span><span class="s3">(</span><span class="s1">c1</span><span class="s3">)</span><span class="s0">} </span><span class="s5">și </span><span class="s0">{</span><span class="s1">set</span><span class="s3">(</span><span class="s1">c2</span><span class="s3">)</span><span class="s0">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+                    <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;NESATISFIABIL&quot;</span><span class="s3">)</span>
+                    <span class="s0">return False</span>
+                <span class="s0">if </span><span class="s1">r </span><span class="s0">not in </span><span class="s1">existente </span><span class="s0">and </span><span class="s1">r </span><span class="s0">not in </span><span class="s1">noi</span><span class="s3">:</span>
+                    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+                        <span class="s1">print</span><span class="s3">(</span><span class="s5">f&quot;</span><span class="s0">{</span><span class="s1">contor</span><span class="s0">}</span><span class="s5">: </span><span class="s0">{</span><span class="s1">set</span><span class="s3">(</span><span class="s1">r</span><span class="s3">)</span><span class="s0">} </span><span class="s5">din </span><span class="s0">{</span><span class="s1">set</span><span class="s3">(</span><span class="s1">c1</span><span class="s3">)</span><span class="s0">} </span><span class="s5">și </span><span class="s0">{</span><span class="s1">set</span><span class="s3">(</span><span class="s1">c2</span><span class="s3">)</span><span class="s0">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+                    <span class="s1">noi</span><span class="s3">.</span><span class="s1">add</span><span class="s3">(</span><span class="s1">r</span><span class="s3">)</span>
+                    <span class="s1">contor </span><span class="s3">+= </span><span class="s4">1</span>
+
+        <span class="s0">if not </span><span class="s1">noi</span><span class="s3">:</span>
+            <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+                <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;</span><span class="s0">\n</span><span class="s5">Nicio rezolventă nouă de adăugat&quot;</span><span class="s3">)</span>
+            <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;SATISFIABIL&quot;</span><span class="s3">)</span>
+            <span class="s0">return True</span>
+
+        <span class="s1">clauze</span><span class="s3">.</span><span class="s1">extend</span><span class="s3">(</span><span class="s1">noi</span><span class="s3">)</span>
+
+<span class="s0">def </span><span class="s1">algoritm_dp</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">=</span><span class="s0">False</span><span class="s3">):</span>
+    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+        <span class="s0">for </span><span class="s1">i</span><span class="s3">, </span><span class="s1">c </span><span class="s0">in </span><span class="s1">enumerate</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">):</span>
+            <span class="s1">print</span><span class="s3">(</span><span class="s5">f&quot;</span><span class="s0">{</span><span class="s1">i</span><span class="s3">+</span><span class="s4">1</span><span class="s0">}</span><span class="s5">: </span><span class="s0">{</span><span class="s1">set</span><span class="s3">(</span><span class="s1">c</span><span class="s3">)</span><span class="s0">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+
+    <span class="s1">clauze </span><span class="s3">= </span><span class="s1">regula_clauzelor_unitare</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">)</span>
+    <span class="s0">if </span><span class="s1">clauze </span><span class="s3">== {</span><span class="s1">frozenset</span><span class="s3">()}:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;NESATISFIABIL&quot;</span><span class="s3">)</span>
+        <span class="s0">return False</span>
+
+    <span class="s1">clauze </span><span class="s3">= </span><span class="s1">regula_literalurilor_pure</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">)</span>
+    <span class="s0">if </span><span class="s1">clauze </span><span class="s3">== {</span><span class="s1">frozenset</span><span class="s3">()}:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;NESATISFIABIL&quot;</span><span class="s3">)</span>
+        <span class="s0">return False</span>
+
+    <span class="s0">if not </span><span class="s1">clauze</span><span class="s3">:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;SATISFIABIL&quot;</span><span class="s3">)</span>
+        <span class="s0">return True</span>
+
+    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;Nu se mai pot aplica reguli DP, folosesc rezoluție...&quot;</span><span class="s3">)</span>
+    <span class="s0">return </span><span class="s1">rezolutie</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">)</span>
+
+<span class="s0">def </span><span class="s1">dpll</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">divizari</span><span class="s3">=</span><span class="s4">0</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">=</span><span class="s0">False</span><span class="s3">):</span>
+    <span class="s1">clauze </span><span class="s3">= </span><span class="s1">regula_clauzelor_unitare</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">)</span>
+    <span class="s0">if </span><span class="s1">frozenset</span><span class="s3">() </span><span class="s0">in </span><span class="s1">clauze </span><span class="s0">or </span><span class="s1">clauze </span><span class="s3">== {</span><span class="s1">frozenset</span><span class="s3">()}:</span>
+        <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+            <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;NESATISFIABIL (conține clauză vidă)&quot;</span><span class="s3">)</span>
+        <span class="s0">return False</span><span class="s3">, </span><span class="s1">divizari</span>
+
+    <span class="s0">if not </span><span class="s1">clauze</span><span class="s3">:</span>
+        <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+            <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;SATISFIABIL (nicio clauză rămasă)&quot;</span><span class="s3">)</span>
+        <span class="s0">return True</span><span class="s3">, </span><span class="s1">divizari</span>
+
+    <span class="s1">clauze </span><span class="s3">= </span><span class="s1">regula_literalurilor_pure</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">)</span>
+    <span class="s0">if not </span><span class="s1">clauze</span><span class="s3">:</span>
+        <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+            <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;SATISFIABIL (litere pure)&quot;</span><span class="s3">)</span>
+        <span class="s0">return True</span><span class="s3">, </span><span class="s1">divizari</span>
+
+    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;Nu se mai pot aplica reguli simple, se face ramificare...&quot;</span><span class="s3">)</span>
+
+    <span class="s2"># Alegerea unui literal</span>
+    <span class="s1">lit </span><span class="s3">= </span><span class="s1">alegere_literal</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">)</span>
+    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">f&quot;Ramific pe literalul </span><span class="s0">{</span><span class="s1">lit</span><span class="s0">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+
+    <span class="s2"># Incrementăm numărul de divizări atunci când facem o alegere de literal</span>
+    <span class="s1">divizari </span><span class="s3">+= </span><span class="s4">1</span>
+
+    <span class="s2"># Crearea celor două ramuri ale căutării</span>
+    <span class="s1">c1 </span><span class="s3">= </span><span class="s1">clauze </span><span class="s3">| {</span><span class="s1">frozenset</span><span class="s3">({</span><span class="s1">lit</span><span class="s3">})}</span>
+    <span class="s1">satisfiabil</span><span class="s3">, </span><span class="s1">d </span><span class="s3">= </span><span class="s1">dpll</span><span class="s3">(</span><span class="s1">c1</span><span class="s3">, </span><span class="s1">divizari</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">)</span>
+    <span class="s0">if </span><span class="s1">satisfiabil</span><span class="s3">:</span>
+        <span class="s0">return True</span><span class="s3">, </span><span class="s1">d</span>
+
+    <span class="s1">c2 </span><span class="s3">= </span><span class="s1">clauze </span><span class="s3">| {</span><span class="s1">frozenset</span><span class="s3">({-</span><span class="s1">lit</span><span class="s3">})}</span>
+    <span class="s0">return </span><span class="s1">dpll</span><span class="s3">(</span><span class="s1">c2</span><span class="s3">, </span><span class="s1">divizari</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">)</span>
+
+<span class="s0">def </span><span class="s1">dpll_cu_afisare</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">=</span><span class="s0">False</span><span class="s3">):</span>
+    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;Pornesc algoritmul DPLL...&quot;</span><span class="s3">)</span>
+    <span class="s1">rezultat</span><span class="s3">, </span><span class="s1">divizari </span><span class="s3">= </span><span class="s1">dpll</span><span class="s3">(</span><span class="s1">clauze</span><span class="s3">, </span><span class="s4">0</span><span class="s3">, </span><span class="s1">afiseaza</span><span class="s3">)</span>
+    <span class="s0">if </span><span class="s1">rezultat</span><span class="s3">:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;SATISFIABIL&quot;</span><span class="s3">)</span>
+    <span class="s0">else</span><span class="s3">:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">&quot;NESATISFIABIL&quot;</span><span class="s3">)</span>
+    <span class="s0">if </span><span class="s1">afiseaza</span><span class="s3">:</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s5">f&quot;Număr total de divizări: </span><span class="s0">{</span><span class="s1">divizari</span><span class="s0">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>generator_fisier.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #6aab73;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+generator_fisier.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">random</span>
+
+
+<span class="s0">def </span><span class="s1">genereaza_clauze</span><span class="s2">(</span><span class="s1">numar_clauze</span><span class="s2">, </span><span class="s1">numar_litere</span><span class="s2">):</span>
+    <span class="s1">clauze </span><span class="s2">= []</span>
+    <span class="s0">for </span><span class="s1">_ </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s1">numar_clauze</span><span class="s2">):</span>
+        <span class="s1">numar_litere_clauza </span><span class="s2">= </span><span class="s1">random</span><span class="s2">.</span><span class="s1">randint</span><span class="s2">(</span><span class="s3">2</span><span class="s2">, </span><span class="s1">numar_litere</span><span class="s2">)</span>
+        <span class="s1">clauza </span><span class="s2">= {</span><span class="s1">random</span><span class="s2">.</span><span class="s1">choice</span><span class="s2">(</span><span class="s1">range</span><span class="s2">(</span><span class="s3">1</span><span class="s2">, </span><span class="s1">numar_litere </span><span class="s2">+ </span><span class="s3">1</span><span class="s2">)) * </span><span class="s1">random</span><span class="s2">.</span><span class="s1">choice</span><span class="s2">([-</span><span class="s3">1</span><span class="s2">, </span><span class="s3">1</span><span class="s2">]) </span><span class="s0">for </span><span class="s1">_ </span><span class="s0">in</span>
+                  <span class="s1">range</span><span class="s2">(</span><span class="s1">numar_litere_clauza</span><span class="s2">)}</span>
+        <span class="s1">clauze</span><span class="s2">.</span><span class="s1">append</span><span class="s2">(</span><span class="s1">clauza</span><span class="s2">)</span>
+    <span class="s0">return </span><span class="s1">clauze</span>
+
+
+<span class="s0">def </span><span class="s1">salveaza_fisierul</span><span class="s2">(</span><span class="s1">clauze</span><span class="s2">, </span><span class="s1">nume_fisier</span><span class="s2">):</span>
+    <span class="s0">with </span><span class="s1">open</span><span class="s2">(</span><span class="s1">nume_fisier</span><span class="s2">, </span><span class="s4">'w'</span><span class="s2">) </span><span class="s0">as </span><span class="s1">f</span><span class="s2">:</span>
+        <span class="s0">for </span><span class="s1">clauza </span><span class="s0">in </span><span class="s1">clauze</span><span class="s2">:</span>
+            <span class="s1">f</span><span class="s2">.</span><span class="s1">write</span><span class="s2">(</span><span class="s4">&quot; &quot;</span><span class="s2">.</span><span class="s1">join</span><span class="s2">(</span><span class="s1">map</span><span class="s2">(</span><span class="s1">str</span><span class="s2">, </span><span class="s1">clauza</span><span class="s2">)) + </span><span class="s4">&quot; 0</span><span class="s0">\n</span><span class="s4">&quot;</span><span class="s2">)</span>
+
+
+<span class="s0">def </span><span class="s1">genereaza_fisier</span><span class="s2">(</span><span class="s1">numar_clauze</span><span class="s2">, </span><span class="s1">numar_litere</span><span class="s2">, </span><span class="s1">nume_fisier</span><span class="s2">):</span>
+    <span class="s1">clauze </span><span class="s2">= </span><span class="s1">genereaza_clauze</span><span class="s2">(</span><span class="s1">numar_clauze</span><span class="s2">, </span><span class="s1">numar_litere</span><span class="s2">)</span>
+    <span class="s1">salveaza_fisierul</span><span class="s2">(</span><span class="s1">clauze</span><span class="s2">, </span><span class="s1">nume_fisier</span><span class="s2">)</span>
+    <span class="s1">print</span><span class="s2">(</span><span class="s4">f&quot;Fișierul </span><span class="s0">{</span><span class="s1">nume_fisier</span><span class="s0">} </span><span class="s4">a fost generat cu </span><span class="s0">{</span><span class="s1">numar_clauze</span><span class="s0">} </span><span class="s4">clauze.&quot;</span><span class="s2">)</span>
+
+
+<span class="s0">def </span><span class="s1">imparte_fisier</span><span class="s2">(</span><span class="s1">fisier_intrare</span><span class="s2">, </span><span class="s1">numar_clauze_pe_fisier</span><span class="s2">):</span>
+    <span class="s0">with </span><span class="s1">open</span><span class="s2">(</span><span class="s1">fisier_intrare</span><span class="s2">, </span><span class="s4">'r'</span><span class="s2">) </span><span class="s0">as </span><span class="s1">f</span><span class="s2">:</span>
+        <span class="s1">clauze </span><span class="s2">= </span><span class="s1">f</span><span class="s2">.</span><span class="s1">readlines</span><span class="s2">()</span>
+
+    <span class="s1">numar_fisier </span><span class="s2">= </span><span class="s3">1</span>
+    <span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s3">0</span><span class="s2">, </span><span class="s1">len</span><span class="s2">(</span><span class="s1">clauze</span><span class="s2">), </span><span class="s1">numar_clauze_pe_fisier</span><span class="s2">):</span>
+        <span class="s1">nume_fisier </span><span class="s2">= </span><span class="s4">f&quot;clauze_</span><span class="s0">{</span><span class="s1">numar_fisier</span><span class="s0">}</span><span class="s4">.txt&quot;</span>
+        <span class="s0">with </span><span class="s1">open</span><span class="s2">(</span><span class="s1">nume_fisier</span><span class="s2">, </span><span class="s4">'w'</span><span class="s2">) </span><span class="s0">as </span><span class="s1">f_out</span><span class="s2">:</span>
+            <span class="s1">f_out</span><span class="s2">.</span><span class="s1">writelines</span><span class="s2">(</span><span class="s1">clauze</span><span class="s2">[</span><span class="s1">i</span><span class="s2">:</span><span class="s1">i </span><span class="s2">+ </span><span class="s1">numar_clauze_pe_fisier</span><span class="s2">])</span>
+        <span class="s1">numar_fisier </span><span class="s2">+= </span><span class="s3">1</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">f&quot;Fișierul </span><span class="s0">{</span><span class="s1">nume_fisier</span><span class="s0">} </span><span class="s4">a fost generat.&quot;</span><span class="s2">)</span>
+
+
+<span class="s5"># Exemplu de folosire</span>
+<span class="s1">genereaza_fisier</span><span class="s2">(</span><span class="s3">10000</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s4">&quot;clauze_10000.txt&quot;</span><span class="s2">)</span>
+<span class="s1">imparte_fisier</span><span class="s2">(</span><span class="s4">&quot;clauze_10000.txt&quot;</span><span class="s2">, </span><span class="s3">1000</span><span class="s2">)</span>
+</pre>
+</body>
+</html>

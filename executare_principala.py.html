@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>executare_principala.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+executare_principala.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">functii_utilitare </span><span class="s0">import </span><span class="s2">*</span>
+<span class="s0">from </span><span class="s1">algoritmi_sat </span><span class="s0">import </span><span class="s2">*</span>
+<span class="s0">import </span><span class="s1">time</span>
+
+<span class="s1">fisier_intrare </span><span class="s2">= </span><span class="s3">&quot;clauze1.txt&quot;</span>
+<span class="s1">clauze </span><span class="s2">= </span><span class="s1">incarca_clauze_din_fisier</span><span class="s2">(</span><span class="s1">fisier_intrare</span><span class="s2">)</span>
+
+<span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">------- Rezolvare prin Rezoluție -------&quot;</span><span class="s2">)</span>
+<span class="s1">start </span><span class="s2">= </span><span class="s1">time</span><span class="s2">.</span><span class="s1">perf_counter</span><span class="s2">()</span>
+<span class="s1">rezolutie</span><span class="s2">(</span><span class="s1">clauze</span><span class="s2">, </span><span class="s1">afiseaza</span><span class="s2">=</span><span class="s0">True</span><span class="s2">)</span>
+<span class="s1">end </span><span class="s2">= </span><span class="s1">time</span><span class="s2">.</span><span class="s1">perf_counter</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;Rezoluția a durat </span><span class="s0">{</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s0">:</span><span class="s3">.6f</span><span class="s0">} </span><span class="s3">secunde.&quot;</span><span class="s2">)</span>
+
+<span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">------- Algoritm DP -------&quot;</span><span class="s2">)</span>
+<span class="s1">clauze </span><span class="s2">= </span><span class="s1">incarca_clauze_din_fisier</span><span class="s2">(</span><span class="s1">fisier_intrare</span><span class="s2">)</span>
+<span class="s1">start </span><span class="s2">= </span><span class="s1">time</span><span class="s2">.</span><span class="s1">perf_counter</span><span class="s2">()</span>
+<span class="s1">algoritm_dp</span><span class="s2">(</span><span class="s1">clauze</span><span class="s2">, </span><span class="s1">afiseaza</span><span class="s2">=</span><span class="s0">True</span><span class="s2">)</span>
+<span class="s1">end </span><span class="s2">= </span><span class="s1">time</span><span class="s2">.</span><span class="s1">perf_counter</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;Algoritmul DP a durat </span><span class="s0">{</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s0">:</span><span class="s3">.6f</span><span class="s0">} </span><span class="s3">secunde.&quot;</span><span class="s2">)</span>
+
+<span class="s1">print</span><span class="s2">(</span><span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">------- Algoritm DPLL -------&quot;</span><span class="s2">)</span>
+<span class="s1">clauze </span><span class="s2">= </span><span class="s1">incarca_clauze_din_fisier</span><span class="s2">(</span><span class="s1">fisier_intrare</span><span class="s2">)</span>
+<span class="s1">start </span><span class="s2">= </span><span class="s1">time</span><span class="s2">.</span><span class="s1">perf_counter</span><span class="s2">()</span>
+<span class="s1">dpll_cu_afisare</span><span class="s2">(</span><span class="s1">clauze</span><span class="s2">, </span><span class="s1">afiseaza</span><span class="s2">=</span><span class="s0">True</span><span class="s2">)</span>
+<span class="s1">end </span><span class="s2">= </span><span class="s1">time</span><span class="s2">.</span><span class="s1">perf_counter</span><span class="s2">()</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s3">f&quot;Algoritmul DPLL a durat </span><span class="s0">{</span><span class="s1">end </span><span class="s2">- </span><span class="s1">start</span><span class="s0">:</span><span class="s3">.6f</span><span class="s0">} </span><span class="s3">secunde.&quot;</span><span class="s2">)</span>
+</pre>
+</body>
+</html>
